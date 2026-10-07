@@ -10,7 +10,9 @@ function UserCard({ user }) {
             alt={user.login}
             className="w-16 h-16 rounded-full"
           />
-          <h1 className="text-black min-w-40 max-w-50">{user.name}</h1>
+          <h1 className="text-black min-w-40 max-w-50 capitalize font-semibold">
+            {user.login}
+          </h1>
         </div>
         <a href="/" className="py-2 px-4 bg-green-600 text-white rounded-md">
           View Profile
