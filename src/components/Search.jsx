@@ -1,6 +1,6 @@
 import { CircleX } from "lucide-react";
 
-function Search({ searchQuery, setSearchQuery }) {
+function Search({ searchQuery, setSearchQuery, onSearch }) {
   return (
     <div>
       <h1>current query: {searchQuery}</h1>
@@ -19,6 +19,12 @@ function Search({ searchQuery, setSearchQuery }) {
               onClick={() => setSearchQuery("")}
             />
           </div>
+          <button
+            className="p-2 bg-green-500 text-white capitalize hover:bg-green-600 cursor-pointer"
+            onClick={onSearch}
+          >
+            Search
+          </button>
         </div>
       </div>
     </div>

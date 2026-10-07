@@ -2,6 +2,7 @@ import React from "react";
 import UserCard from "./UserCard";
 
 function UserList({ users }) {
+  console.log(`------from UserList ${users}`);
   return (
     <div className="flex flex-col gap-4">
       {users.map((user) => {

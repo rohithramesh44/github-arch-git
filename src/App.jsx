@@ -1,7 +1,7 @@
 import { useState } from "react";
 import UsersList from "./components/UserList";
 import Search from "./components/Search";
-import { users } from "./data/userData";
+import { searchUsers } from "./api/github";
 import SearchResult from "./components/SearchResult";
 
 function App() {
@@ -9,10 +9,28 @@ function App() {
   const [hasSearched, setHasSearched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [usersData, setUsersData] = useState([]);
+
+  async function handleSearch() {
+    setLoading(true);
+    setHasSearched(true);
+    try {
+      const results = await searchUsers(searchQuery);
+      setUsersData(results);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <>
-      <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <Search
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        onSearch={handleSearch}
+      />
       <SearchResult searchQuery={searchQuery} />
       {!hasSearched ? (
         <p>Enter a search query to find users.</p>
@@ -20,10 +38,10 @@ function App() {
         <p>{error}</p>
       ) : loading ? (
         <p>Loading...</p>
-      ) : users.length === 0 ? (
-        <p>No user found</p>
+      ) : usersData.length === 0 ? (
+        <p>No user found in here</p>
       ) : (
-        <UsersList users={users} />
+        <UsersList users={usersData} />
       )}
     </>
   );
