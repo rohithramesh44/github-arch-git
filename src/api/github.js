@@ -1,6 +1,7 @@
-export async function searchUsers(query) {
+export async function searchUsers(query, signal) {
   const response = await fetch(
     `https://api.github.com/search/users?q=${encodeURIComponent(query)}`,
+    { signal },
   );
 
   if (!response.ok) {
