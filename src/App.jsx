@@ -63,7 +63,10 @@ function App() {
       ) : usersData.length === 0 ? (
         <p>No user found in here</p>
       ) : (
-        <UsersList users={usersData} />
+        <div>
+          <p style={{ color: "blue" }}>Search Complete successfully</p>
+          <UsersList users={usersData} />
+        </div>
       )}
     </>
   );
