@@ -65,6 +65,7 @@ function App() {
       ) : (
         <div>
           <p style={{ color: "blue" }}>Search Complete successfully</p>
+          <p>{usersData.length} users Found</p>
           <UsersList users={usersData} />
         </div>
       )}
