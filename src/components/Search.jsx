@@ -1,12 +1,18 @@
+import { useRef, useEffect } from "react";
 import { CircleX } from "lucide-react";
 
 function Search({ searchQuery, setSearchQuery, onSearch, setUsersData }) {
+  const inputRef = useRef(null);
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
   return (
     <div>
       <h1>current query: {searchQuery}</h1>
       <div className="flex justify-center my-6">
         <div className="w-1/3 flex border border-gray-200  ">
           <input
+            ref={inputRef}
             type="text"
             placeholder="Search Users..."
             value={searchQuery}
