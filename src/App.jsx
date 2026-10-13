@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import UsersList from "./components/UserList";
 import Search from "./components/Search";
 import { searchUsers } from "./api/github";
@@ -22,9 +22,12 @@ function App() {
     setFilterText(value);
   }
 
-  const filteredUsers = usersData.filter((user) =>
-    user.login.toLowerCase().includes(filterText.toLowerCase()),
-  );
+  const filteredUsers = useMemo(() => {
+    console.log("filtering users...");
+    return usersData.filter((user) =>
+      user.login.toLowerCase().includes(filterText.toLowerCase()),
+    );
+  }, [usersData, filterText]);
 
   useEffect(() => {
     if (!query) return;
@@ -65,6 +68,11 @@ function App() {
         setUsersData={setUsersData}
       />
       <SearchResult searchQuery={searchQuery} />
+      {usersData.length > 0 ? (
+        <UserFilter filterText={filterText} onFilterChange={onFilterChange} />
+      ) : (
+        ""
+      )}
       {!hasSearched ? (
         <p>Enter a search query to find users.</p>
       ) : error ? (
@@ -77,7 +85,7 @@ function App() {
         <div>
           <p style={{ color: "blue" }}>Search Complete successfully</p>
           <p>{usersData.length} users Found</p>
-          <UserFilter fitlerText={filterText} onFilterChange={onFilterChange} />
+
           <UsersList users={filteredUsers} />
         </div>
       )}
