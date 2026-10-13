@@ -3,6 +3,7 @@ import UsersList from "./components/UserList";
 import Search from "./components/Search";
 import { searchUsers } from "./api/github";
 import SearchResult from "./components/SearchResult";
+import UserFilter from "./components/UserFilter";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,10 +12,19 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [usersData, setUsersData] = useState([]);
+  const [filterText, setFilterText] = useState("");
 
   function handleSearch() {
     setQuery(searchQuery);
   }
+
+  function onFilterChange(value) {
+    setFilterText(value);
+  }
+
+  const filteredUsers = usersData.filter((user) =>
+    user.login.toLowerCase().includes(filterText.toLowerCase()),
+  );
 
   useEffect(() => {
     if (!query) return;
@@ -29,6 +39,7 @@ function App() {
 
       try {
         const results = await searchUsers(query, controller.signal);
+        console.log(results);
         setUsersData(results);
       } catch (e) {
         if (e.name === "AbortError") return;
@@ -66,7 +77,8 @@ function App() {
         <div>
           <p style={{ color: "blue" }}>Search Complete successfully</p>
           <p>{usersData.length} users Found</p>
-          <UsersList users={usersData} />
+          <UserFilter fitlerText={filterText} onFilterChange={onFilterChange} />
+          <UsersList users={filteredUsers} />
         </div>
       )}
     </>
