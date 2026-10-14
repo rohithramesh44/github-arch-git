@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import UsersList from "./components/UserList";
 import Search from "./components/Search";
 import { searchUsers } from "./api/github";
 import SearchResult from "./components/SearchResult";
+import UserFilter from "./components/UserFilter";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,10 +12,22 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [usersData, setUsersData] = useState([]);
+  const [filterText, setFilterText] = useState("");
 
   function handleSearch() {
     setQuery(searchQuery);
   }
+
+  function onFilterChange(value) {
+    setFilterText(value);
+  }
+
+  const filteredUsers = useMemo(() => {
+    console.log("filtering users...");
+    return usersData.filter((user) =>
+      user.login.toLowerCase().includes(filterText.toLowerCase()),
+    );
+  }, [usersData, filterText]);
 
   useEffect(() => {
     if (!query) return;
@@ -29,6 +42,7 @@ function App() {
 
       try {
         const results = await searchUsers(query, controller.signal);
+        console.log(results);
         setUsersData(results);
       } catch (e) {
         if (e.name === "AbortError") return;
@@ -54,6 +68,11 @@ function App() {
         setUsersData={setUsersData}
       />
       <SearchResult searchQuery={searchQuery} />
+      {usersData.length > 0 ? (
+        <UserFilter filterText={filterText} onFilterChange={onFilterChange} />
+      ) : (
+        ""
+      )}
       {!hasSearched ? (
         <p>Enter a search query to find users.</p>
       ) : error ? (
@@ -66,7 +85,8 @@ function App() {
         <div>
           <p style={{ color: "blue" }}>Search Complete successfully</p>
           <p>{usersData.length} users Found</p>
-          <UsersList users={usersData} />
+
+          <UsersList users={filteredUsers} />
         </div>
       )}
     </>
