@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import { CircleX } from "lucide-react";
 
-function Search({ searchQuery, setSearchQuery, onSearch, setUsersData }) {
+function Search({ searchQuery, setSearchQuery, onSearch, clearUsers }) {
   const inputRef = useRef(null);
   useEffect(() => {
     inputRef.current.focus();
@@ -24,7 +24,7 @@ function Search({ searchQuery, setSearchQuery, onSearch, setUsersData }) {
               className="text-gray-300 hover:text-gray-500"
               onClick={() => {
                 setSearchQuery("");
-                setUsersData([]);
+                clearUsers();
               }}
             />
           </div>
